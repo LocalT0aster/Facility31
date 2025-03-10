@@ -1,10 +1,11 @@
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Astronaut))]
 public class AstronautController : MonoBehaviour {
     [Header("Movement Settings")]
-    public float acceleration = 10f;    // Force for translation
-    public float maxSpeed = 50f;        // Maximum speed (set high for "no limits")
+    public float acceleration = 200f;    // Force for translation
+    public float maxSpeed = 1000f;        // Maximum speed (set high for "no limits")
     public float linearDamping = 1f;    // Coefficient for the extra damping force
     [Tooltip("Built-in drag value when linear damping is active")]
     public float builtinLinearDrag = 0.1f;
@@ -12,42 +13,61 @@ public class AstronautController : MonoBehaviour {
     public float stopThreshold = 0.02f;
 
     [Header("Rotation Settings")]
-    public float turnTorque = 100f;     // Torque factor for yaw (mouse horizontal)
-    public float pitchTorque = 100f;    // Torque factor for pitch (mouse vertical)
-    public float rollTorque = 100f;     // Torque factor for roll (Q/E keys)
+    public float turnTorque = 500f;     // Torque factor for yaw (mouse horizontal)
+    public float pitchTorque = 500f;    // Torque factor for pitch (mouse vertical)
+    public float rollTorque = 500f;     // Torque factor for roll (Q/E keys)
     [Tooltip("Damping factor to reduce residual angular velocity when no input is given")]
-    public float angularDamping = 5f;   // Damping factor for angular velocity
+    public float angularDamping = 1.7f;   // Damping factor for angular velocity
 
     // Toggles for damping
     private bool angularDampingEnabled = true;
     private bool linearDampingEnabled = true;
 
+    public bool HasControl = true;
+
     private Rigidbody rb;
+    private Astronaut astr;
+    private float currentCost;
+
+    // Axis
+    private const string InputVerticalAxis = "Vertical";
+    private const string InputHorizontalAxis = "Horizontal";
+    private const string InputMouseXAxis = "Mouse X";
+    private const string InputMouseYAxis = "Mouse Y";
 
     void Start() {
+        astr = GetComponent<Astronaut>();
         rb = GetComponent<Rigidbody>();
-        rb.useGravity = false;
+        //rb.useGravity = false;
         // Set initial drag to zero, we'll override it as needed.
         rb.drag = 0f;
         // We'll handle angular damping manually, so set angularDrag to zero.
         rb.angularDrag = 0f;
     }
 
+    void ToggleControl() {
+        HasControl = !HasControl;
+    }
+
     // Check for toggle inputs in Update
     void Update() {
-        if (Input.GetKeyDown(KeyCode.CapsLock)) {
-            angularDampingEnabled = !angularDampingEnabled;
-        }
-
-        if (Input.GetKeyDown(KeyCode.Tab)) {
-            linearDampingEnabled = !linearDampingEnabled;
+        if (HasControl) {
+            if (Input.GetKeyDown(KeyCode.CapsLock)) {
+                angularDampingEnabled = !angularDampingEnabled;
+            }
+            if (Input.GetKeyDown(KeyCode.Tab)) {
+                linearDampingEnabled = !linearDampingEnabled;
+            }
         }
     }
 
     void FixedUpdate() {
+        if (!HasControl) return;
+        currentCost = 0f;
+
         // ---- TRANSLATION INPUT ----
-        float moveInput = Input.GetAxis("Vertical");     // Forward/backward
-        float strafeInput = Input.GetAxis("Horizontal");   // Left/right
+        float moveInput = Input.GetAxis(InputVerticalAxis);     // Forward/backward
+        float strafeInput = Input.GetAxis(InputHorizontalAxis);   // Left/right
 
         // Vertical movement: Space for up, LeftControl for down
         float verticalInput = 0f;
@@ -55,6 +75,8 @@ public class AstronautController : MonoBehaviour {
             verticalInput = 1f;
         else if (Input.GetKey(KeyCode.LeftControl))
             verticalInput = -1f;
+
+        currentCost += Mathf.Abs(moveInput) + Mathf.Abs(strafeInput) + Mathf.Abs(verticalInput);
 
         // Determine if any translation input exists
         bool translationInputActive = !Mathf.Approximately(moveInput, 0f) ||
@@ -67,7 +89,7 @@ public class AstronautController : MonoBehaviour {
                          transform.up * verticalInput) * acceleration;
         rb.AddForce(force);
 
-        // Optional: Limit maximum speed (set maxSpeed high if you want "no limits")
+        // Clamp max speed
         if (rb.velocity.magnitude > maxSpeed) {
             rb.velocity = rb.velocity.normalized * maxSpeed;
         }
@@ -81,20 +103,25 @@ public class AstronautController : MonoBehaviour {
             rb.AddForce(dampingForce * Time.fixedDeltaTime, ForceMode.Acceleration);
             // Enable built-in drag for additional damping.
             rb.drag = builtinLinearDrag;
+            if (rb.velocity.magnitude >= 0.1f) {
+                currentCost += 1f;
+            }
         } else {
             // Reset built-in drag when user provides input.
             rb.drag = 0f;
         }
 
         // ---- ROTATION VIA TORQUE ----
-        float yawInput = Input.GetAxis("Mouse X");
-        float pitchInput = -Input.GetAxis("Mouse Y");  // Inverted if needed
+        float yawInput = Input.GetAxis(InputMouseXAxis);
+        float pitchInput = -Input.GetAxis(InputMouseYAxis);
 
         float rollInput = 0f;
         if (Input.GetKey(KeyCode.Q))
             rollInput = 1f;
         if (Input.GetKey(KeyCode.E))
             rollInput = -1f;
+
+        currentCost += Mathf.Abs(yawInput) + Mathf.Abs(pitchInput) + Mathf.Abs(rollInput);
 
         Vector3 torque = Vector3.zero;
         torque += transform.up * yawInput * turnTorque;
@@ -109,6 +136,11 @@ public class AstronautController : MonoBehaviour {
             Mathf.Approximately(pitchInput, 0f) &&
             Mathf.Approximately(rollInput, 0f)) {
             rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, angularDamping * Time.fixedDeltaTime);
+            if (rb.angularVelocity.magnitude >= 0.05f) {
+                currentCost += 1f;
+            }
         }
+
+        astr.ChargeDeplete(currentCost);
     }
 }
