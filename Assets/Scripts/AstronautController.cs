@@ -30,10 +30,17 @@ public class AstronautController : MonoBehaviour {
     private float currentCost;
 
     // Axis
-    private const string InputVerticalAxis = "Vertical";
+    private const string InputForwardAxis = "Forward";
     private const string InputHorizontalAxis = "Horizontal";
+    private const string InputVerticalAxis = "Vertical";
+    // Yaw
     private const string InputMouseXAxis = "Mouse X";
+    // Pitch
     private const string InputMouseYAxis = "Mouse Y";
+    // Roll
+    private const string InputRollAxis = "Roll";
+    // Damping Controls
+    private const string InputDampingControlAxis = "DPadHor";
 
     void Start() {
         astr = GetComponent<Astronaut>();
@@ -66,15 +73,10 @@ public class AstronautController : MonoBehaviour {
         currentCost = 0f;
 
         // ---- TRANSLATION INPUT ----
-        float moveInput = Input.GetAxis(InputVerticalAxis);     // Forward/backward
-        float strafeInput = Input.GetAxis(InputHorizontalAxis);   // Left/right
+        float moveInput = Input.GetAxis(InputForwardAxis);      // Forward/Backward
+        float strafeInput = Input.GetAxis(InputHorizontalAxis); // Left/Right
+        float verticalInput = Input.GetAxis(InputVerticalAxis); // Up/Down
 
-        // Vertical movement: Space for up, LeftControl for down
-        float verticalInput = 0f;
-        if (Input.GetKey(KeyCode.Space))
-            verticalInput = 1f;
-        else if (Input.GetKey(KeyCode.LeftControl))
-            verticalInput = -1f;
 
         currentCost += Mathf.Abs(moveInput) + Mathf.Abs(strafeInput) + Mathf.Abs(verticalInput);
 
@@ -114,12 +116,7 @@ public class AstronautController : MonoBehaviour {
         // ---- ROTATION VIA TORQUE ----
         float yawInput = Input.GetAxis(InputMouseXAxis);
         float pitchInput = -Input.GetAxis(InputMouseYAxis);
-
-        float rollInput = 0f;
-        if (Input.GetKey(KeyCode.Q))
-            rollInput = 1f;
-        if (Input.GetKey(KeyCode.E))
-            rollInput = -1f;
+        float rollInput = Input.GetAxis(InputRollAxis);
 
         currentCost += Mathf.Abs(yawInput) + Mathf.Abs(pitchInput) + Mathf.Abs(rollInput);
 
