@@ -1,7 +1,9 @@
+using System;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 [RequireComponent(typeof(EnemyFollow))]
-public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener {
+public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener, IDamageble {
     [Header("Vision / Wander")]
     [SerializeField] private float sightDistance = 100f;
     [SerializeField] private LayerMask sightMask = Physics.DefaultRaycastLayers;
@@ -20,6 +22,7 @@ public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener {
     private float defaultNotify;  // value to restore when not chasing
 
     private const string playerTag = "Player";
+    public event Action<float> OnDamaged;
 
     void Awake() {
         mover = GetComponent<EnemyFollow>();
@@ -162,5 +165,10 @@ public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener {
             case State.Return: SwitchState(State.Wander); break;
             default: break;
         }
+    }
+
+    public void Damage(float damage) {
+        OnDamaged?.Invoke(damage);
+        return;
     }
 }

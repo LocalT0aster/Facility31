@@ -38,6 +38,12 @@ public class PointerController : MonoBehaviour
 
     void Update()
     {
+        if (astr.Health <= 0f) {
+            HideQTE();
+            this.enabled = false;
+            return;
+        }
+
         // Toggle QTE visibility with R key
         if (Input.GetKeyDown(KeyCode.R) && !isActive)
         {

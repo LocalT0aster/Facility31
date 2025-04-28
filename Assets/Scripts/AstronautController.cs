@@ -5,7 +5,7 @@ using UnityEngine;
 public class AstronautController : MonoBehaviour {
     [Header("Movement Settings")]
     public float acceleration = 200f;    // Force for translation
-    public float maxSpeed = 1000f;        // Maximum speed (set high for "no limits")
+    public float maxSpeed = 1000f;        // Maximum speed
     public float linearDamping = 1f;    // Coefficient for the extra damping force
     [Tooltip("Built-in drag value when linear damping is active")]
     public float builtinLinearDrag = 0.1f;

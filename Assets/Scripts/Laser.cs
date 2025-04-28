@@ -14,31 +14,34 @@ public class Laser : MonoBehaviour
     private RaycastHit rayHit;
     private Ray ray;
 
-
-
     private void Awake()
     {
         lineRenderer.positionCount = 2;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         ray = new Ray(transform.position, transform.forward);
 
-        if (Physics.Raycast(ray, out rayHit))
-        {
+        if (Physics.Raycast(ray, out rayHit)) {
             lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, rayHit.point);
 
-            //must have a MonoBehaviour script called Target with public method Hit
-            if (rayHit.collider.TryGetComponent(out Target target))
-            {
-                target.Hit();
-                OnHitTarget?.Invoke();
+            IDamageble entity = null;
+
+            rayHit.collider.TryGetComponent<Astronaut>(out Astronaut astr);
+            rayHit.collider.TryGetComponent<EnemyAI>(out EnemyAI enem);
+            if (astr != null)
+                entity = astr;
+            else if (enem != null)
+                entity = enem;
+
+            if (entity != null) {
+               entity.Damage(100f);
+               OnHitTarget?.Invoke();
             }
         }
-        else
-        {
+        else {
             lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, transform.position + transform.forward * laserDistance);
         }
