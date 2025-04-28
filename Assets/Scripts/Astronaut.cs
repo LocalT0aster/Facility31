@@ -9,6 +9,8 @@ public class Astronaut : MonoBehaviour
     public float Charge = 100f;
     public float FuelConsumption = 1f;
 
+    private bool IsDead = false;
+
     private AstronautController ac;
     void Start() {
         ac = GetComponent<AstronautController>();
@@ -26,5 +28,11 @@ public class Astronaut : MonoBehaviour
     {
         Charge = MaxCharge;
         ac.HasControl = true;
+    }
+
+    public void Die() {
+        Charge = 0f;
+        ChargeDeplete(0);
+        IsDead = true;
     }
 }

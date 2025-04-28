@@ -13,8 +13,6 @@ public class LevelExit : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             Debug.Log("Level Clear!");
-            int currentSceneIndex = SceneManager.GetActiveScene().buildIndex;
-            level = currentSceneIndex;
             SceneManager.LoadScene(level);
         }
     }
