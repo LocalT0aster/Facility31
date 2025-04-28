@@ -14,7 +14,6 @@ public class PointerController : MonoBehaviour
     public float widthReductionPerLevel = 0.5f;
     [Range(0.1f, 0.9f)] public float positionChangeRange = 0.7f;
 
-    private float direction = 1f;
     private RectTransform pointerTransform;
     private Vector3 targetPosition;
     private int currentLevel = 1;
@@ -54,12 +53,10 @@ public class PointerController : MonoBehaviour
         if (Vector3.Distance(pointerTransform.position, pointA.position) < 0.1f)
         {
             targetPosition = pointB.position;
-            direction = 1f;
         }
         else if (Vector3.Distance(pointerTransform.position, pointB.position) < 0.1f)
         {
             targetPosition = pointA.position;
-            direction = -1f;
         }
 
         if (Input.GetKeyDown(KeyCode.R))
@@ -132,6 +129,5 @@ public class PointerController : MonoBehaviour
         safeZone.position = initialSafeZonePosition;
         pointerTransform.position = pointA.position;
         targetPosition = pointB.position;
-        direction = 1f;
     }
 }
