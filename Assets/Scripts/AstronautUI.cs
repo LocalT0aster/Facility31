@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Astronaut))]
+[RequireComponent(typeof(CursorLock))]
 public class AstronautUI : MonoBehaviour
 {
     public Image ChargeBar;
@@ -32,6 +33,12 @@ public class AstronautUI : MonoBehaviour
             HealthBar.enabled = true;
             HealthBarBg.enabled = true;
         }
-        HealthBar.fillAmount = astr.Health > 0f ? astr.Health / astr.MaxHealth : 0f;
+        bool notDeadYet = astr.Health > 0f;
+        HealthBar.fillAmount = notDeadYet ? astr.Health / astr.MaxHealth : 0f;
+        
+        if (notDeadYet) return;
+
+        CursorLock cl = GetComponent<CursorLock>();
+        cl.UpdateLock(false, false);
     }
 }

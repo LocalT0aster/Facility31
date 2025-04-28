@@ -1,19 +1,23 @@
 using UnityEngine;
 
 public class CursorLock : MonoBehaviour {
-    public bool LockCursor = true;
-    public bool HideCursor = true;
+    [SerializeField] bool lockCursor = true;
+    [SerializeField] bool hideCursor = true;
 
     void OnValidate() {
-        UpdateLock();
+        UpdateLock(keep: true);
     }
 
     void Awake() {
-        UpdateLock();
+        UpdateLock(keep: true);
     }
 
-    void UpdateLock() {
-        Cursor.lockState = LockCursor ? CursorLockMode.Locked : CursorLockMode.None;
-        Cursor.visible = HideCursor;
+    public void UpdateLock(bool Lock = true, bool hide = true, bool keep = false) {
+        if (!keep) {   
+            lockCursor = Lock;
+            hideCursor = hide;
+        }
+        Cursor.lockState = lockCursor ? CursorLockMode.Locked : CursorLockMode.None;
+        Cursor.visible = !hideCursor;
     }
 }
