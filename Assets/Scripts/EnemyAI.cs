@@ -24,6 +24,16 @@ public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener, IDamage
     private const string playerTag = "Player";
     public event Action<float> OnDamaged;
 
+    public AudioClip sound1;
+    public AudioClip sound2;
+    public AudioClip sound3;
+    public AudioClip sound4;
+    private AudioSource src;
+
+    void Start() => src = GetComponent<AudioSource>();
+
+    public void Play(AudioClip sound) => src.PlayOneShot(sound);
+
     void Awake() {
         mover = GetComponent<EnemyFollow>();
         player = GameObject.FindGameObjectWithTag(playerTag)?.transform;
@@ -84,22 +94,26 @@ public class EnemyAI : MonoBehaviour, IRoomListener, IProximityListener, IDamage
 
         switch (state) {
             case State.Chase:
+                Play(sound1);
                 Debug.Log(string.Format("{0} is chasing", name));
                 mover.target = player;
                 break;
 
             case State.Investigate:
+                Play(sound2);
                 Debug.Log(string.Format("{0} is investigating", name));
                 pointMarker.position = lastSeenPos;
                 mover.target = pointMarker;
                 break;
 
             case State.Return:
+                Play(sound3);
                 Debug.Log(string.Format("{0} is returning to previous room", name));
                 SetRoomCentreTarget();
                 break;
 
             case State.Wander:
+                Play(sound4);
                 Debug.Log(string.Format("{0} is wandering", name));
                 PickNewWanderPoint();
                 break;
