@@ -3,6 +3,8 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(Astronaut))]
 public class AstronautController : MonoBehaviour {
+
+    public ContinuousSound thrusters;
     [Header("Movement Settings")]
     public float acceleration = 200f;    // Force for translation
     public float maxSpeed = 1000f;        // Maximum speed
@@ -43,6 +45,7 @@ public class AstronautController : MonoBehaviour {
     private const string InputDampingControlAxis = "DPadHor";
 
     void Start() {
+        thrusters = GetComponent<ContinuousSound>();
         astr = GetComponent<Astronaut>();
         rb = GetComponent<Rigidbody>();
         //rb.useGravity = false;
@@ -137,7 +140,6 @@ public class AstronautController : MonoBehaviour {
                 currentCost += 1f;
             }
         }
-
         astr.ChargeDeplete(currentCost);
     }
 }
