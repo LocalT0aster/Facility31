@@ -14,7 +14,7 @@ public class Astronaut : MonoBehaviour, IDamageble
     [Header("Damage")]
     public float DamageMultiplier = 1f;
     public float MinImpactSpeed = 10f;
-    public float DamagePerSpeed = 10f;
+    public float DamagePerSpeed = 5f;
 
     public GameObject DeathScreen;
 
