@@ -11,6 +11,8 @@ public class Astronaut : MonoBehaviour, IDamageble
     public float Charge = 100f;
     public float FuelConsumption = 1f;
 
+    public GameObject DeathScreen;
+
     private AstronautController ac;
     public event Action<float> OnDamaged;
 
@@ -39,6 +41,7 @@ public class Astronaut : MonoBehaviour, IDamageble
             if (Health <= 0f) {
                 ac.enabled = false;
                 Charge = 0f;
+                DeathScreen.SetActive(true);
             }
             OnDamaged?.Invoke(damage);
         }
