@@ -114,6 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3263256316172365181}
+  - component: {fileID: 1140580957275873836}
   - component: {fileID: 4145436641130059206}
   m_Layer: 3
   m_Name: Attack_Aura
@@ -137,6 +138,18 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3778187195649289547}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1140580957275873836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2481417225689121324}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57dc606f7e081c541b788aafdb30a300, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &4145436641130059206
 SphereCollider:
   m_ObjectHideFlags: 0
