@@ -5,6 +5,8 @@ using UnityEngine;
 [RequireComponent(typeof(AudioSource))]
 public class AmbientLooper : MonoBehaviour
 {
+    public static AmbientLooper Instance { get; private set; }
+
     [Header("Audio Settings")]
     public AudioClip ambientClip;
     [Range(0, 1)] public float volume = 0.5f;
@@ -18,6 +20,15 @@ public class AmbientLooper : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton pattern to prevent duplicates
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
+        DontDestroyOnLoad(gameObject);
+
         audioSource = GetComponent<AudioSource>();
         audioSource.clip = ambientClip;
         audioSource.volume = 0;
