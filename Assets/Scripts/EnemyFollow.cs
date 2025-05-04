@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -9,6 +10,7 @@ public class EnemyFollow : MonoBehaviour {
         get => stoppingDistance;
         set => stoppingDistance = Mathf.Max(0.1f, value);
     }
+    public bool HasControl = true;
     public float NotifyProximity = 5f;
     private IProximityListener proximityListener;
 
@@ -16,6 +18,7 @@ public class EnemyFollow : MonoBehaviour {
     [SerializeField] private float forceMultiplier = 10f;
     [SerializeField] private float maxSpeed = 5f;
     [SerializeField] private float rotationSpeed = 2f;
+    [SerializeField] private float velocityCap = 15f;
 
     [Header("PID Controller")]
     [SerializeField] private float proportionalGain = 0.5f;  // P term
@@ -42,9 +45,15 @@ public class EnemyFollow : MonoBehaviour {
         rb.angularDrag = 0;
     }
 
+    public IEnumerator TemporaryDisable(float time)
+    {
+        HasControl = false;
+        yield return new WaitForSeconds(time);
+        HasControl = true;
+    }
     void FixedUpdate()
     {
-        if (target == null) return;
+        if (target == null || !HasControl) return;
 
         HandleRotation();
         HandleMovement();
@@ -82,5 +91,6 @@ public class EnemyFollow : MonoBehaviour {
 
         // Apply force
         rb.AddForce(force, ForceMode.Acceleration);
+        rb.velocity = Vector3.ClampMagnitude(rb.velocity, velocityCap);
     }
 }

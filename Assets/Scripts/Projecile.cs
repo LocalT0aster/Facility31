@@ -23,7 +23,18 @@ public class Bullet : MonoBehaviour
         }
         triggered = true;
         Debug.Log("fixfoam activated");
-        var foam = Instantiate(fixfoam);
+        GameObject foam;
+        if (other.gameObject.CompareTag("Enemy"))
+        {
+            var otherObject = other.gameObject.GetComponent<EnemyFollow>();
+            otherObject.StartCoroutine(otherObject.TemporaryDisable(10f));
+            foam = Instantiate(fixfoam, other.gameObject.transform);
+            foam.transform.position = transform.position;
+            foam.transform.rotation = transform.rotation;
+            Destroy(gameObject);
+            return;
+        }
+        foam = Instantiate(fixfoam);
         foam.transform.position = transform.position;
         foam.transform.rotation = transform.rotation;
         Destroy(gameObject);

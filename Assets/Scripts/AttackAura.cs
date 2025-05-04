@@ -10,6 +10,7 @@ public class AttackAura : MonoBehaviour
     {
         
     }
+    public float damage = 10f;
 
     private Astronaut target;
 
@@ -18,7 +19,7 @@ public class AttackAura : MonoBehaviour
     {
         if (target != null)
         {
-            target.Damage(50f);
+            target.Damage(damage);
         }
     }
 

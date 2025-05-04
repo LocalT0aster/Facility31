@@ -65,9 +65,6 @@ public class AstronautController : MonoBehaviour {
             if (Input.GetKeyDown(KeyCode.CapsLock)) {
                 angularDampingEnabled = !angularDampingEnabled;
             }
-            if (Input.GetKeyDown(KeyCode.Tab)) {
-                linearDampingEnabled = !linearDampingEnabled;
-            }
         }
     }
 
@@ -80,6 +77,7 @@ public class AstronautController : MonoBehaviour {
         float strafeInput = Input.GetAxis(InputHorizontalAxis); // Left/Right
         float verticalInput = Input.GetAxis(InputVerticalAxis); // Up/Down
 
+        linearDampingEnabled = Input.GetKey(KeyCode.Space);
 
         currentCost += Mathf.Abs(moveInput) + Mathf.Abs(strafeInput) + Mathf.Abs(verticalInput);
 
@@ -101,8 +99,8 @@ public class AstronautController : MonoBehaviour {
 
         // ---- LINEAR DAMPING ----
         // If no translation input is provided and linear damping is enabled,
-        // apply extra damping.
-        if (linearDampingEnabled && !translationInputActive) {
+        // apply extra damping.  && !translationInputActive
+        if (linearDampingEnabled) {
             // Apply a damping force in addition to enabling built-in drag.
             Vector3 dampingForce = -rb.velocity.normalized * acceleration * linearDamping;
             rb.AddForce(dampingForce * Time.fixedDeltaTime, ForceMode.Acceleration);
@@ -130,11 +128,15 @@ public class AstronautController : MonoBehaviour {
 
         rb.AddTorque(torque * Time.fixedDeltaTime, ForceMode.Acceleration);
 
-        // ---- ANGULAR DAMPING ----
-        if (angularDampingEnabled &&
+
+        /* 
+          &&
             Mathf.Approximately(yawInput, 0f) &&
             Mathf.Approximately(pitchInput, 0f) &&
-            Mathf.Approximately(rollInput, 0f)) {
+            Mathf.Approximately(rollInput, 0f)
+         */
+        // ---- ANGULAR DAMPING ----
+        if (angularDampingEnabled) {
             rb.angularVelocity = Vector3.Lerp(rb.angularVelocity, Vector3.zero, angularDamping * Time.fixedDeltaTime);
             if (rb.angularVelocity.magnitude >= 0.05f) {
                 currentCost += 1f;

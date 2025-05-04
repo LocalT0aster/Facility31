@@ -397,7 +397,7 @@ MonoBehaviour:
   stopThreshold: 0.02
   turnTorque: 500
   pitchTorque: 500
-  rollTorque: 500
+  rollTorque: 250
   angularDamping: 1.7
   HasControl: 1
 --- !u!114 &6579436619351147309
@@ -477,10 +477,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 100
   Health: 100
-  DamageMultiplier: 1
   MaxCharge: 100
   Charge: 100
   FuelConsumption: 1
+  DamageMultiplier: 1
+  MinImpactSpeed: 10
+  DamagePerSpeed: 10
   DeathScreen: {fileID: 0}
 --- !u!114 &8277134411134601645
 MonoBehaviour:
