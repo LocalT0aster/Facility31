@@ -11,6 +11,7 @@ public class EnemyFollow : MonoBehaviour {
         set => stoppingDistance = Mathf.Max(0.1f, value);
     }
     public bool HasControl = true;
+    public bool DisableMovement = false;
     public float NotifyProximity = 5f;
     private IProximityListener proximityListener;
 
@@ -75,6 +76,8 @@ public class EnemyFollow : MonoBehaviour {
         if (distance < NotifyProximity) {
             proximityListener.OnProximity();
         }
+
+        if (DisableMovement) {return; }
         // Stop if within stopping distance
         if (distance < StoppingDistance)
         {
