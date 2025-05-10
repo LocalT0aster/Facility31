@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 112000000, guid: 2af93db738e776d4889795f1d7494e28, type: 2}
+  m_LightingDataAsset: {fileID: 112000000, guid: 93edee97e9be5ee45ba86fa3ef92287c, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: 2848e3e29d771d54295d4ccb3a52f52d, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -7109,7 +7109,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 28666
+    surfaceParameter: 44006
     meshQueryIndex: 5
     subMeshQueryIndex: 0
     geometryHashValue: -3673773989403145737
@@ -11491,7 +11491,7 @@ MonoBehaviour:
     meshQuery:
       layers: 16777223
       maskAndChannels: 234881031
-    surfaceParameter: 28636
+    surfaceParameter: 44050
     meshQueryIndex: 0
     subMeshQueryIndex: 0
     geometryHashValue: -5848654261387589035
@@ -13280,7 +13280,7 @@ MonoBehaviour:
     meshQuery:
       layers: 33554440
       maskAndChannels: 8
-    surfaceParameter: 28694
+    surfaceParameter: 44116
     meshQueryIndex: 1
     subMeshQueryIndex: 0
     geometryHashValue: -6600805855824241117
