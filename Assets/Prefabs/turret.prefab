@@ -174,7 +174,7 @@ MonoBehaviour:
   NotifyProximity: 5
   forceMultiplier: 10
   maxSpeed: 5
-  rotationSpeed: 1
+  rotationSpeed: 3
   velocityCap: 15
   proportionalGain: 0.5
   derivativeGain: 0.1
