@@ -11,6 +11,8 @@ public class Laser : MonoBehaviour
     [SerializeField] private LayerMask ignoreMask;
     [SerializeField] private UnityEvent OnHitTarget;
 
+    public GameObject LaserSound;
+
     private RaycastHit rayHit;
     private Ray ray;
 
@@ -26,6 +28,9 @@ public class Laser : MonoBehaviour
         if (Physics.Raycast(ray, out rayHit)) {
             lineRenderer.SetPosition(0, transform.position);
             lineRenderer.SetPosition(1, rayHit.point);
+
+            LaserSound.transform.position = rayHit.point;
+
 
             IDamageble entity = null;
 
