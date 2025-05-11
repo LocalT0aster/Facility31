@@ -53,8 +53,21 @@ public class Astronaut : MonoBehaviour, IDamageble
     }
 
     private void OnCollisionEnter(Collision collision) {
-        float impactSpeed = collision.relativeVelocity.magnitude;
+        ContactPoint[] contacts = new ContactPoint[collision.contactCount];
+        collision.GetContacts(contacts);
+        Vector3 CollisionCenter = Vector3.zero;
+        float impactSpeed;
 
+        if (contacts.Length > 0) {
+            foreach (ContactPoint c in contacts) { // Calculate the Center of collision, to determine the actual velocity.
+                CollisionCenter += c.point;
+            }
+            CollisionCenter /= contacts.Length;
+            impactSpeed = Vector3.Project(collision.relativeVelocity, transform.position - CollisionCenter).magnitude;
+        } else {
+            Debug.LogWarning("We hit something, but without contact. Ignoring the collision.");
+            return;
+        }
         if (impactSpeed > MinImpactSpeed) {
             float damageAmount = (impactSpeed - MinImpactSpeed) * DamagePerSpeed;
             Damage(damageAmount);
